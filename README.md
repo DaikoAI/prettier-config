@@ -6,10 +6,10 @@ For the official approach, see Prettier docs: [Sharing configurations](https://p
 
 ## Install
 
-This package provides only a shareable config. Install `prettier` and required plugins in the consumer project.
+This package provides a shareable config and bundles the required plugins. Install `prettier` in the consumer project.
 
 ```bash
-npm i -D @daikolabs/prettier-config prettier prettier-plugin-organize-imports @prettier/plugin-oxc
+npm i -D @daikolabs/prettier-config prettier
 ```
 
 ## Usage
@@ -57,8 +57,8 @@ The workflow passes these environment variables to semantic-release:
   - Used to create GitHub releases / comments, and to push release commits (e.g. changelog).
 - **`NPM_TOKEN`**: must be configured in GitHub Repository Secrets.
   - Used by `@semantic-release/npm` to publish to npm.
-- **`NODE_AUTH_TOKEN`**: in this repo it is set to the same value as `NPM_TOKEN`.
-  - Used by npm to authenticate against the npm registry in CI.
+
+Note: the workflow also sets `NODE_AUTH_TOKEN` to the same value as `NPM_TOKEN` for npm CLI compatibility. You only need to manage **one** secret (`NPM_TOKEN`).
 
 ### One-time setup steps
 
