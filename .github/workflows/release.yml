@@ -22,14 +22,9 @@ jobs:
 
       - run: npm install --no-fund --no-audit
 
-      - name: Create Release PR or Publish
-        uses: changesets/action@v1
-        with:
-          version: npm run version-packages
-          publish: npm run release
+      - name: Release (semantic-release)
+        run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-

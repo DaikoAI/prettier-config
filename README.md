@@ -47,11 +47,7 @@ npm run build
 
 ## CIで自動publish（GitHub Actions）
 
-このリポジトリは Changesets を使って、`main` へのpush時に「Release PR作成」または「npm publish」を自動実行します。
+このリポジトリは semantic-release を使って、`main` へのpush時に **自動でバージョンを決めて npm publish** します（コミットメッセージが Conventional Commits 形式であることが前提）。
 
 - npm publish するには GitHub の Repository Secrets に **`NPM_TOKEN`** を設定してください。
-- 変更をpublish対象にするには changeset を追加します:
-
-```bash
-npm run changeset
-```
+- Conventional Commits 形式のコミットなら publish 対象になります（このリポジトリでは `docs:` / `chore:` なども patch release にしています）。
