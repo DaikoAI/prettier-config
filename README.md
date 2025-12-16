@@ -1,12 +1,12 @@
 # @daikolabs/prettier-config
 
-Daiko Labs の共通 Prettier 設定（shareable config）です。
+Daiko Labs shared Prettier configuration (shareable config).
 
-公式の作り方は Prettier ドキュメントの [Sharing configurations](https://prettier.io/docs/sharing-configurations) を参照してください。
+For the official approach, see Prettier docs: [Sharing configurations](https://prettier.io/docs/sharing-configurations).
 
 ## Install
 
-このパッケージは shareable config のみを提供します。plugins / prettier は利用側（consumer）でインストールしてください。
+This package provides only a shareable config. Install `prettier` and required plugins in the consumer project.
 
 ```bash
 npm i -D @daikolabs/prettier-config prettier prettier-plugin-organize-imports @prettier/plugin-oxc
@@ -14,7 +14,7 @@ npm i -D @daikolabs/prettier-config prettier prettier-plugin-organize-imports @p
 
 ## Usage
 
-`package.json` に設定します。
+Set it in `package.json`.
 
 ```json
 {
@@ -22,9 +22,9 @@ npm i -D @daikolabs/prettier-config prettier prettier-plugin-organize-imports @p
 }
 ```
 
-## Extending (上書き)
+## Extending (overrides)
 
-利用側で一部だけ上書きしたい場合は `.prettierrc.mjs` を作り、import して spread します。
+If you want to override only a subset of settings in the consumer project, create `.prettierrc.mjs`, import the base config, and spread it.
 
 ```js
 import base from "@daikolabs/prettier-config";
@@ -32,22 +32,49 @@ import base from "@daikolabs/prettier-config";
 /** @type {import("prettier").Config} */
 export default {
   ...base,
-  // 例: プロジェクトごとに変更したい設定があればここで上書き
+  // Example: override settings per project
   // semi: false,
 };
 ```
 
-## Development (TSで管理)
+## Development (TypeScript source)
 
-設定は `index.ts` で管理し、publish時に `tsc` で `dist/index.js` を生成します（Prettierが読むのは `dist/index.js`）。
+The config is maintained in `index.ts`. On publish, we build `dist/index.js` (Prettier reads `dist/index.js`).
 
 ```bash
 npm run build
 ```
 
-## CIで自動publish（GitHub Actions）
+## Auto publishing in CI (GitHub Actions)
 
-このリポジトリは semantic-release を使って、`main` へのpush時に **自動でバージョンを決めて npm publish** します（コミットメッセージが Conventional Commits 形式であることが前提）。
+This repository uses semantic-release to **automatically version and publish to npm** on pushes to `main` (commit messages must follow Conventional Commits).
 
-- npm publish するには GitHub の Repository Secrets に **`NPM_TOKEN`** を設定してください。
-- Conventional Commits 形式のコミットなら publish 対象になります（このリポジトリでは `docs:` / `chore:` なども patch release にしています）。
+### Required environment variables (GitHub Actions)
+
+The workflow passes these environment variables to semantic-release:
+
+- **`GITHUB_TOKEN`**: provided automatically by GitHub Actions (`secrets.GITHUB_TOKEN`).
+  - Used to create GitHub releases / comments, and to push release commits (e.g. changelog).
+- **`NPM_TOKEN`**: must be configured in GitHub Repository Secrets.
+  - Used by `@semantic-release/npm` to publish to npm.
+- **`NODE_AUTH_TOKEN`**: in this repo it is set to the same value as `NPM_TOKEN`.
+  - Used by npm to authenticate against the npm registry in CI.
+
+### One-time setup steps
+
+- **npm**:
+  - Create an automation token (or access token) that has permission to publish the package.
+  - Add it to GitHub Repository Secrets as **`NPM_TOKEN`**.
+- **GitHub**:
+  - Ensure the Actions workflow has permissions to write to contents (this repo’s `release.yml` requests `contents: write`).
+  - Protect `main` as you like, but note releases run on push to `main`.
+
+### Release flow (what happens)
+
+- **Write commits using Conventional Commits** (examples):
+  - `feat: ...` → minor release
+  - `fix: ...` → patch release
+  - `docs: ...` / `chore: ...` → patch release (configured in `.releaserc.json`)
+- **Merge/push to `main`**:
+  - GitHub Actions runs `npm install`, then `npm run release`.
+  - semantic-release determines the next version, generates release notes, updates `CHANGELOG.md`, publishes to npm, and creates a GitHub release.
