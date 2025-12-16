@@ -39,7 +39,7 @@ export default {
 
 ## Development (TypeScript source)
 
-The config is maintained in `index.ts`. On publish, we build `dist/index.js` (Prettier reads `dist/index.js`).
+The config is maintained in `index.ts`. On publish, we build `dist/index.mjs` (Prettier reads `dist/index.mjs`).
 
 ```bash
 npm run build

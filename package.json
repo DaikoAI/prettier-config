@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Daiko Labs shared Prettier configuration",
   "type": "module",
-  "exports": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "exports": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsdown -p tsconfig.json && tsc -p tsconfig.json --emitDeclarationOnly --outDir dist",
+    "build": "tsdown index.ts --tsconfig tsconfig.json --clean --dts",
     "prepublishOnly": "npm run build",
     "release": "semantic-release"
   },
@@ -39,5 +39,5 @@
     "type": "git",
     "url": "git+ssh://git@github.com/DaikoAI/prettier-config.git"
   },
-  "main": "./dist/index.js"
+  "main": "./dist/index.mjs"
 }
