@@ -49,6 +49,8 @@ npm run build
 
 This repository uses semantic-release to **automatically version and publish to npm** on pushes to `main` (commit messages must follow Conventional Commits).
 
+Note: semantic-release in this repo requires **Node `^22.14.0 || >=24.10.0`** (the workflow pins Node `22.14.0`).
+
 ### Required environment variables (GitHub Actions)
 
 The workflow passes these environment variables to semantic-release:
