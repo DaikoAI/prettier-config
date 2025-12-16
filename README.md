@@ -63,8 +63,9 @@ Note: the workflow also sets `NODE_AUTH_TOKEN` to the same value as `NPM_TOKEN` 
 ### One-time setup steps
 
 - **npm**:
-  - Create an automation token (or access token) that has permission to publish the package.
+  - This package is published to the **`@daikolabs`** scope (`@daikolabs/prettier-config`). Create an automation token (or access token) that has permission to publish under the **`@daikolabs`** organization.
   - Add it to GitHub Repository Secrets as **`NPM_TOKEN`**.
+  - If the `@daikolabs` org enforces 2FA for publishing, use an **automation token** (recommended) or follow your org policy for CI publishing.
 - **GitHub**:
   - Ensure the Actions workflow has permissions to write to contents (this repo’s `release.yml` requests `contents: write`).
   - Protect `main` as you like, but note releases run on push to `main`.
